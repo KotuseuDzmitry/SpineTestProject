@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-namespace SurcuitUtitlity
+namespace BezierSurcuitUtitlity
 {
     [Serializable]
     public class BezierPoint
@@ -29,6 +29,13 @@ namespace SurcuitUtitlity
             this.anchor = anchor;
             controlPoint1 = anchor + Vector2.right;
             controlPoint2 = anchor - Vector2.right;
+        }
+
+        public BezierPoint(Vector2 anchor, Vector2 direction)
+        {
+            this.anchor = anchor;
+            controlPoint1 = anchor + direction.normalized;
+            controlPoint2 = anchor - direction.normalized;
         }
 
         public BezierPoint(Vector2 anchor, Vector2 direction, float offset)

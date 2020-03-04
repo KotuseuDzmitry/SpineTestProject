@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace SurcuitUtitlity
+namespace BezierSurcuitUtitlity
 {
     [Serializable]
     public class Path : IEnumerable

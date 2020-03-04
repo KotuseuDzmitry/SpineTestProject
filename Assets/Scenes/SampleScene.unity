@@ -166,9 +166,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   path:
     points:
-    - anchor: {x: 9.693997, y: -5.2810583}
-      controlPoint1: {x: 10.693996, y: -5.2810583}
-      controlPoint2: {x: 8.693997, y: -5.2810583}
-    - anchor: {x: 17.04662, y: 9.637604}
-      controlPoint1: {x: 21.374413, y: 4.935295}
-      controlPoint2: {x: 12.718826, y: 14.339912}
+    - anchor: {x: 0, y: 0}
+      controlPoint1: {x: 1, y: 0}
+      controlPoint2: {x: -1, y: 0}

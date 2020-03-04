@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 
-namespace SurcuitUtitlity
+namespace BezierSurcuitUtitlity
 {
     [CustomEditor(typeof(Curcuit))]
     public class CurcuitEditor : Editor
@@ -48,7 +48,6 @@ namespace SurcuitUtitlity
         {
             if (selectedSegment != new Vector2Int(-1, -1))
             {
-                Debug.Log(Selection.activeGameObject);
                 Selection.activeGameObject = curcuit.gameObject;
             }
         }
@@ -60,8 +59,20 @@ namespace SurcuitUtitlity
             Vector2 mousePosition = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition).origin;
             HandleAddPointToTheEnd(guiEvent, mousePosition);
             HandleSelection(guiEvent, mousePosition);
-            // HandleRemovePoint(guiEvent);
+            HandleRemovePoint(guiEvent);
             HandleInsertPoint(guiEvent);
+        }
+
+        private void HandleRemovePoint(Event guiEvent)
+        {
+            if (guiEvent.type == EventType.KeyDown && guiEvent.keyCode == KeyCode.X && guiEvent.shift
+                && selectedBezierPoint != null)
+            {
+                if (curcuit.Path.Count > 1)
+                {
+                    curcuit.Path.RemovePoint(selectedBezierPoint);
+                }
+            }
         }
 
         private void HandleInsertPoint(Event guiEvent)
@@ -69,8 +80,19 @@ namespace SurcuitUtitlity
             if (guiEvent.type == EventType.KeyDown && guiEvent.keyCode == KeyCode.I && guiEvent.shift
                 && selectedSegment != new Vector2Int(-1, -1))
             {
+                Vector2 midPoint = Bezier.CubicCurve(
+                    curcuit.Path[selectedSegment.x].Anchor,
+                    curcuit.Path[selectedSegment.x].ControlPoint2,
+                    curcuit.Path[selectedSegment.y].ControlPoint1,
+                    curcuit.Path[selectedSegment.y].Anchor,
+                    0.5f
+                    );
+
+                Vector2 direction = curcuit.Path[selectedSegment.x].Anchor - curcuit.Path[selectedSegment.y].Anchor;
+
                 curcuit.Path.InsertPoint(selectedSegment.y, new BezierPoint(
-                    Vector2.Lerp(curcuit.Path[selectedSegment.x].Anchor, curcuit.Path[selectedSegment.y].Anchor, 0.5f)
+                    midPoint,
+                    direction
                     ));
             }
         }
@@ -98,8 +120,15 @@ namespace SurcuitUtitlity
             if (guiEvent.type == EventType.KeyDown && guiEvent.keyCode == KeyCode.A && guiEvent.shift)
             {
                 Undo.RecordObject(curcuit, "Add Bezier Point");
+
+                Vector2 direction = curcuit.Path.Count > 0
+                    ? curcuit.Path[curcuit.Path.Count - 1].Anchor - mousePosition : Vector2.right;
+
                 curcuit.Path.AddPoint(
-                    new BezierPoint(handleTransform.InverseTransformPoint(mousePosition))
+                    new BezierPoint(
+                        handleTransform.InverseTransformPoint(mousePosition),
+                        direction
+                        )
                     );
             }
         }
