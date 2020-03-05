@@ -80,6 +80,8 @@ namespace BezierSurcuitUtitlity
                         curcuitEditor.SelectedBezierPoint = null;
                     }
                 }
+
+                curcuitEditor.Repaint();
             }
         }
 
@@ -155,7 +157,31 @@ namespace BezierSurcuitUtitlity
         {
             Vector2Int currentSelectionCandidate = new Vector2Int(-1, -1);
             float currentMinDistance = CurcuitEditor.maxDistanceToCurve;
-            for (var i = 1; i < curcuitEditor.TargetCurcuit.Path.Count; i++)
+
+            int pathCount = curcuitEditor.TargetCurcuit.Path.Count;
+
+            if (curcuitEditor.TargetCurcuit.Path.IsCyclic && pathCount >= 2)
+            {
+                Vector2 anchorGlobal
+                    = curcuitEditor.HandleTransform.TransformPoint(curcuitEditor.TargetCurcuit.Path[pathCount - 1].Anchor);
+                float anchorSize = HandleUtility.GetHandleSize(anchorGlobal);
+
+                float distance = HandleUtility.DistancePointBezier(
+                    mousePosition,
+                    curcuitEditor.HandleTransform.TransformPoint(curcuitEditor.TargetCurcuit.Path[pathCount - 1].Anchor),
+                    curcuitEditor.HandleTransform.TransformPoint(curcuitEditor.TargetCurcuit.Path[0].Anchor),
+                    curcuitEditor.HandleTransform.TransformPoint(curcuitEditor.TargetCurcuit.Path[pathCount - 1].ControlPoint2),
+                    curcuitEditor.HandleTransform.TransformPoint(curcuitEditor.TargetCurcuit.Path[0].ControlPoint1)
+                    ) / anchorSize;
+
+                if (distance < currentMinDistance)
+                {
+                    currentMinDistance = distance;
+                    currentSelectionCandidate = new Vector2Int(pathCount - 1, 0);
+                }
+            }
+
+            for (var i = 1; i < pathCount; i++)
             {
                 Vector2 anchorGlobal = curcuitEditor.HandleTransform.TransformPoint(curcuitEditor.TargetCurcuit.Path[i - 1].Anchor);
                 float anchorSize = HandleUtility.GetHandleSize(anchorGlobal);

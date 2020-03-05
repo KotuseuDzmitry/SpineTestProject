@@ -8,9 +8,16 @@ namespace BezierSurcuitUtitlity
     [Serializable]
     public class Path : IEnumerable
     {
+#if UNITY_EDITOR
+        [SerializeField]
+        [HideInInspector]
+        public bool isExpanded = false;
+#endif
+
         [SerializeField]
         private List<BezierPoint> points = new List<BezierPoint>();
 
+        [SerializeField]
         private bool isCyclic = false;
 
         public Path()

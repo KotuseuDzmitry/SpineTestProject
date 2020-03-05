@@ -6,6 +6,12 @@ namespace BezierSurcuitUtitlity
     [Serializable]
     public class BezierPoint
     {
+#if UNITY_EDITOR
+        [SerializeField]
+        [HideInInspector]
+        public bool isExpanded = false;
+#endif
+
         [SerializeField]
         private Vector2 anchor;
 
@@ -62,7 +68,7 @@ namespace BezierSurcuitUtitlity
                 {
                     controlPoint2 = 2 * anchor - controlPoint1;
                 }
-                else if (value == BezierControlPointMode.Aligned)
+                else if (value == BezierControlPointMode.Aligned && controlPointMode != BezierControlPointMode.Mirrored)
                 {
                     float distance = (anchor - controlPoint2).magnitude;
                     controlPoint2 = (2 * anchor - controlPoint1).normalized * distance;
@@ -106,7 +112,7 @@ namespace BezierSurcuitUtitlity
                 else if (controlPointMode == BezierControlPointMode.Aligned)
                 {
                     float distance = (anchor - controlPoint2).magnitude;
-                    controlPoint2 = (2 * anchor - controlPoint1).normalized * distance;
+                    controlPoint2 = anchor + (anchor - controlPoint1).normalized * distance;
                 }
             }
         }
@@ -128,7 +134,7 @@ namespace BezierSurcuitUtitlity
                 else if (controlPointMode == BezierControlPointMode.Aligned)
                 {
                     float distance = (anchor - controlPoint1).magnitude;
-                    controlPoint1 = (2 * anchor - controlPoint2).normalized * distance;
+                    controlPoint1 = anchor + (anchor - controlPoint2).normalized * distance;
                 }
             }
         }

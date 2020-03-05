@@ -165,61 +165,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   path:
+    isExpanded: 1
     points:
-    - anchor: {x: 5.901808, y: -5.671269}
-      controlPoint1: {x: 6.4868364, y: -5.0257587}
-      controlPoint2: {x: 5.3167787, y: -6.3167768}
-    - anchor: {x: -0.7377257, y: -6.455102}
-      controlPoint1: {x: 0.8783494, y: -7.7237363}
-      controlPoint2: {x: -2.3538008, y: -5.1864676}
-    - anchor: {x: -9.3311825, y: -4.2662787}
-      controlPoint1: {x: -5.813613, y: -7.453885}
-      controlPoint2: {x: -12.848752, y: -1.0786724}
-    - anchor: {x: -9.677452, y: 0.6543151}
-      controlPoint1: {x: -8.2497425, y: 0.34863102}
-      controlPoint2: {x: -11.105162, y: 0.9599992}
-    - anchor: {x: -8.483851, y: 9.1754675}
-      controlPoint1: {x: -13.364273, y: 6.6319017}
-      controlPoint2: {x: -3.6034288, y: 11.719034}
-    - anchor: {x: 2.1209633, y: 3.6886299}
-      controlPoint1: {x: -0.26067448, y: 6.1218886}
-      controlPoint2: {x: 4.502601, y: 1.2553711}
-    - anchor: {x: 8.931462, y: 8.901054}
-      controlPoint1: {x: 8.012522, y: 9.295449}
-      controlPoint2: {x: 9.850405, y: 8.506659}
-    - anchor: {x: 12.864099, y: -0.92215747}
-      controlPoint1: {x: 10.508024, y: -4.6306586}
-      controlPoint2: {x: 15.220173, y: 2.7863436}
-    - anchor: {x: 14.800628, y: -7.146721}
-      controlPoint1: {x: 15.355328, y: -6.3146706}
-      controlPoint2: {x: 14.245928, y: -7.9787703}
-    - anchor: {x: -4.841327, y: -9.129358}
-      controlPoint1: {x: -3.8582952, y: -8.945922}
-      controlPoint2: {x: -5.8243585, y: -9.312795}
-    - anchor: {x: -15.088173, y: -6.7091303}
-      controlPoint1: {x: -14.102322, y: -6.8767533}
-      controlPoint2: {x: -16.074028, y: -6.5415072}
-    - anchor: {x: -20.409542, y: -0.36902755}
-      controlPoint1: {x: -20.332739, y: -1.3660738}
-      controlPoint2: {x: -20.486347, y: 0.6280187}
-    - anchor: {x: -14.106707, y: -2.4199495}
-      controlPoint1: {x: -15.106248, y: -2.4502387}
-      controlPoint2: {x: -13.107165, y: -2.3896604}
-    - anchor: {x: -20.109406, y: 3.282615}
-      controlPoint1: {x: -19.911829, y: 2.3023276}
-      controlPoint2: {x: -20.306982, y: 4.2629023}
-    - anchor: {x: -16.207653, y: 3.3826587}
-      controlPoint1: {x: -16.955063, y: 2.7182949}
-      controlPoint2: {x: -15.460243, y: 4.0470223}
-    - anchor: {x: -20.509584, y: 6.484052}
-      controlPoint1: {x: -20.169449, y: 5.543676}
-      controlPoint2: {x: -20.84972, y: 7.4244294}
-    - anchor: {x: -15.107154, y: 9.135245}
-      controlPoint1: {x: -16.041441, y: 8.814897}
-      controlPoint2: {x: -14.172867, y: 9.455594}
-    - anchor: {x: -5.852996, y: 3.6827948}
-      controlPoint1: {x: -4.204753, y: 6.480984}
-      controlPoint2: {x: -7.5012403, y: 0.88460445}
-    - anchor: {x: -9.557087, y: 12.9770775}
-      controlPoint1: {x: -9.051149, y: 13.148982}
-      controlPoint2: {x: -10.0630245, y: 12.805173}
+    - isExpanded: 0
+      anchor: {x: 2.0811205, y: -8.98134}
+      controlPoint1: {x: 1.0851371, y: -9.070879}
+      controlPoint2: {x: 3.0771036, y: -8.891802}
+    - isExpanded: 0
+      anchor: {x: 7.807874, y: -6.7958527}
+      controlPoint1: {x: 7.5306635, y: -7.7566624}
+      controlPoint2: {x: 8.085085, y: -5.8350434}
+    - isExpanded: 1
+      anchor: {x: 7.460715, y: 1.4837795}
+      controlPoint1: {x: 4.5815325, y: 1.2120055}
+      controlPoint2: {x: 11.963267, y: 1.908788}
+    - isExpanded: 0
+      anchor: {x: -3.6479282, y: 7.7936087}
+      controlPoint1: {x: 0.48280573, y: 7.6532774}
+      controlPoint2: {x: -7.7786613, y: 7.93394}
+    - isExpanded: 1
+      anchor: {x: -9.627562, y: 3.833245}
+      controlPoint1: {x: -5.0893416, y: 1.9945381}
+      controlPoint2: {x: -13.130663, y: 5.252563}
+    - isExpanded: 1
+      anchor: {x: -10.662233, y: -2.7795074}
+      controlPoint1: {x: -14.738659, y: -1.7656761}
+      controlPoint2: {x: -4.92032, y: -2.889217}
+    - isExpanded: 0
+      anchor: {x: -2.3325956, y: -2.0454278}
+      controlPoint1: {x: -3.869107, y: -0.8158101}
+      controlPoint2: {x: -0.7960832, y: -3.2750456}
+    - isExpanded: 1
+      anchor: {x: 0.41250706, y: -7.4136333}
+      controlPoint1: {x: -1.4451863, y: -8.343661}
+      controlPoint2: {x: 4.5528464, y: -5.340831}
+    isCyclic: 1

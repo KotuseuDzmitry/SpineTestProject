@@ -16,14 +16,21 @@ namespace BezierSurcuitUtitlity
                 return;
             }
 
+            int pathCount = curcuitEditor.TargetCurcuit.Path.Count;
+
             Handles.color = curcuitEditor.NormalColor;
 
-            if (curcuitEditor.TargetCurcuit.Path.Count > 0)
+            if (pathCount > 0)
             {
                 ShowBezierPoint(curcuitEditor.TargetCurcuit.Path[0]);
             }
 
-            for (var i = 1; i < curcuitEditor.TargetCurcuit.Path.Count; i++)
+            if (curcuitEditor.TargetCurcuit.Path.IsCyclic && pathCount >= 2)
+            {
+                ShowBezierCurve(curcuitEditor.TargetCurcuit.Path[pathCount - 1], curcuitEditor.TargetCurcuit.Path[0], pathCount - 1, 0);
+            }
+
+            for (var i = 1; i < pathCount; i++)
             {
                 ShowBezierPoint(curcuitEditor.TargetCurcuit.Path[i]);
 
@@ -77,6 +84,10 @@ namespace BezierSurcuitUtitlity
 
         private static void ShowPointAnchorPoint(BezierPoint bezierPoint)
         {
+            Color oldColor = Handles.color;
+
+            Handles.color = curcuitEditor.BezierAnchorPointColor;
+
             Vector2 anchorGlobal = curcuitEditor.HandleTransform.TransformPoint(bezierPoint.Anchor);
 
             float size = HandleUtility.GetHandleSize(anchorGlobal);
@@ -90,6 +101,8 @@ namespace BezierSurcuitUtitlity
                 Undo.RecordObject(curcuitEditor.TargetCurcuit, "Move Anchor Point");
                 bezierPoint.Anchor = curcuitEditor.HandleTransform.InverseTransformPoint(anchorGlobal);
             }
+
+            Handles.color = oldColor;
         }
 
         private static void ShowPointControlPoint(BezierPoint bezierPoint, int pointIndex)
@@ -124,7 +137,6 @@ namespace BezierSurcuitUtitlity
                     bezierPoint.ControlPoint2 = curcuitEditor.HandleTransform.InverseTransformPoint(pointGlobal);
                 }
             }
-
         }
     }
 }
