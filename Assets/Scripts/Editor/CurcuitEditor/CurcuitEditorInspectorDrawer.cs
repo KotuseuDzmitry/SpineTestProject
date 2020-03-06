@@ -64,6 +64,35 @@ namespace BezierSurcuitUtitlity
 
                 ShowPoints();
 
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+
+                if (GUILayout.Button("Add new point",
+                    GUILayout.Height(25f), GUILayout.Width(200f)))
+                {
+                    curcuitEditor.AddPointInOrigin();
+                    return;
+                }
+
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
+
+
+                EditorGUI.BeginDisabledGroup(curcuitEditor.SelectedSegment == new Vector2Int(-1, -1));
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+
+                if (GUILayout.Button("Insert point into selected curve",
+                    GUILayout.Height(25f), GUILayout.Width(200f)))
+                {
+                    curcuitEditor.InsertPoint();
+                    return;
+                }
+
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
+                EditorGUI.EndDisabledGroup();
+
                 EditorGUI.indentLevel -= 1;
             }
         }
@@ -91,8 +120,18 @@ namespace BezierSurcuitUtitlity
                 foldoutStyle.onNormal.textColor = curcuitEditor.SelectedBezierPointInspectorColor;
             }
 
+            EditorGUILayout.BeginHorizontal();
+
             curcuitEditor.TargetCurcuit.Path[i].isExpanded
                 = EditorGUILayout.Foldout(curcuitEditor.TargetCurcuit.Path[i].isExpanded, $"Bezier point {i}", true, foldoutStyle);
+
+            if (GUILayout.Button("X", new GUIStyle(EditorStyles.miniButton) { }, GUILayout.Height(20f), GUILayout.Width(20f)))
+            {
+                curcuitEditor.TargetCurcuit.Path.RemovePointAt(i);
+                return;
+            }
+
+            EditorGUILayout.EndHorizontal();
 
             if (curcuitEditor.TargetCurcuit.Path[i].isExpanded)
             {

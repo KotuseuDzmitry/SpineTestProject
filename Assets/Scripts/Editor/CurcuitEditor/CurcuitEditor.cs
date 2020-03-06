@@ -74,6 +74,74 @@ namespace BezierSurcuitUtitlity
 
         public Color SelectedBezierPointInspectorColor => selectedBezierPointInspectorColor;
 
+        public void InsertPoint()
+        {
+            Undo.RecordObject(TargetCurcuit, "Insert Bezier Point");
+
+            Vector2 midPoint = Bezier.CubicCurve(
+                    TargetCurcuit.Path[SelectedSegment.x].Anchor,
+                    TargetCurcuit.Path[SelectedSegment.x].ControlPoint2,
+                    TargetCurcuit.Path[SelectedSegment.y].ControlPoint1,
+                    TargetCurcuit.Path[SelectedSegment.y].Anchor,
+                    0.5f
+                    );
+
+            Vector2 direction = TargetCurcuit.Path[SelectedSegment.x].Anchor
+                - TargetCurcuit.Path[SelectedSegment.y].Anchor;
+
+            BezierPoint newPoint = new BezierPoint(
+                midPoint,
+                direction
+                );
+
+            TargetCurcuit.Path.InsertPoint(SelectedSegment.y, newPoint);
+
+            SelectedBezierPoint = newPoint;
+            SelectedSegment = new Vector2Int(-1, -1);
+        }
+
+        public void AddPoint(Vector2 mousePosition)
+        {
+            Undo.RecordObject(TargetCurcuit, "Add Bezier Point");
+
+            Vector2 direction = TargetCurcuit.Path.Count > 0
+                ? TargetCurcuit.Path[TargetCurcuit.Path.Count - 1].Anchor - mousePosition : Vector2.right;
+
+            BezierPoint newPoint = new BezierPoint(
+                    HandleTransform.InverseTransformPoint(mousePosition),
+                    direction
+                    );
+
+            TargetCurcuit.Path.AddPoint(
+                newPoint
+                );
+
+            SelectedBezierPoint = newPoint;
+            SelectedSegment = new Vector2Int(-1, -1);
+        }
+
+        public void AddPointInOrigin()
+        {
+            Undo.RecordObject(TargetCurcuit, "Add Bezier Point");
+
+            BezierPoint newPoint = new BezierPoint();
+
+            TargetCurcuit.Path.AddPoint(newPoint);
+
+            SelectedBezierPoint = newPoint;
+            SelectedSegment = new Vector2Int(-1, -1);
+        }
+
+        public void RemovePoint()
+        {
+            if (TargetCurcuit.Path.Count > 1)
+            {
+                Undo.RecordObject(TargetCurcuit, "Remove Bezier Point");
+
+                TargetCurcuit.Path.RemovePoint(SelectedBezierPoint);
+            }
+        }
+
         private void OnEnable()
         {
             TargetCurcuit = target as Curcuit;

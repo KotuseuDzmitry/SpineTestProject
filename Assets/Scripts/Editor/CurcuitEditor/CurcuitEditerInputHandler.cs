@@ -30,10 +30,7 @@ namespace BezierSurcuitUtitlity
             if (guiEvent.type == EventType.KeyDown && guiEvent.keyCode == KeyCode.X && guiEvent.shift
                 && curcuitEditor.SelectedBezierPoint != null)
             {
-                if (curcuitEditor.TargetCurcuit.Path.Count > 1)
-                {
-                    curcuitEditor.TargetCurcuit.Path.RemovePoint(curcuitEditor.SelectedBezierPoint);
-                }
+                curcuitEditor.RemovePoint();
             }
         }
 
@@ -42,26 +39,7 @@ namespace BezierSurcuitUtitlity
             if (guiEvent.type == EventType.KeyDown && guiEvent.keyCode == KeyCode.I && guiEvent.shift
                 && curcuitEditor.SelectedSegment != new Vector2Int(-1, -1))
             {
-                Vector2 midPoint = Bezier.CubicCurve(
-                    curcuitEditor.TargetCurcuit.Path[curcuitEditor.SelectedSegment.x].Anchor,
-                    curcuitEditor.TargetCurcuit.Path[curcuitEditor.SelectedSegment.x].ControlPoint2,
-                    curcuitEditor.TargetCurcuit.Path[curcuitEditor.SelectedSegment.y].ControlPoint1,
-                    curcuitEditor.TargetCurcuit.Path[curcuitEditor.SelectedSegment.y].Anchor,
-                    0.5f
-                    );
-
-                Vector2 direction = curcuitEditor.TargetCurcuit.Path[curcuitEditor.SelectedSegment.x].Anchor
-                    - curcuitEditor.TargetCurcuit.Path[curcuitEditor.SelectedSegment.y].Anchor;
-
-                BezierPoint newPoint = new BezierPoint(
-                    midPoint,
-                    direction
-                    );
-
-                curcuitEditor.TargetCurcuit.Path.InsertPoint(curcuitEditor.SelectedSegment.y, newPoint);
-
-                curcuitEditor.SelectedBezierPoint = newPoint;
-                curcuitEditor.SelectedSegment = new Vector2Int(-1, -1);
+                curcuitEditor.InsertPoint();
             }
         }
 
@@ -89,22 +67,7 @@ namespace BezierSurcuitUtitlity
         {
             if (guiEvent.type == EventType.KeyDown && guiEvent.keyCode == KeyCode.A && guiEvent.shift)
             {
-                Undo.RecordObject(curcuitEditor.TargetCurcuit, "Add Bezier Point");
-
-                Vector2 direction = curcuitEditor.TargetCurcuit.Path.Count > 0
-                    ? curcuitEditor.TargetCurcuit.Path[curcuitEditor.TargetCurcuit.Path.Count - 1].Anchor - mousePosition : Vector2.right;
-
-                BezierPoint newPoint = new BezierPoint(
-                        curcuitEditor.HandleTransform.InverseTransformPoint(mousePosition),
-                        direction
-                        );
-
-                curcuitEditor.TargetCurcuit.Path.AddPoint(
-                    newPoint
-                    );
-
-                curcuitEditor.SelectedBezierPoint = newPoint;
-                curcuitEditor.SelectedSegment = new Vector2Int(-1, -1);
+                curcuitEditor.AddPoint(mousePosition);
             }
         }
 
