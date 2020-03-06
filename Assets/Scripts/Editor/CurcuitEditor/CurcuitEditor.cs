@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 
 namespace BezierSurcuitUtitlity
 {
@@ -105,72 +104,7 @@ namespace BezierSurcuitUtitlity
 #if UNITY_EDITOR
         public override void OnInspectorGUI()
         {
-            EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.ObjectField("Script", Script, typeof(MonoScript), false);
-            EditorGUI.EndDisabledGroup();
-
-            EditorGUILayout.Space();
-
-            EditorGUILayout.LabelField(
-                "<b>Curcuit</b>",
-                new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = 16, richText = true },
-                GUILayout.ExpandWidth(true));
-
-            EditorGUILayout.Space();
-
-            TargetCurcuit.Path.isExpanded = EditorGUILayout.Foldout(TargetCurcuit.Path.isExpanded, "Path", true);
-            if (TargetCurcuit.Path.isExpanded)
-            {
-                EditorGUI.indentLevel += 1;
-
-                TargetCurcuit.Path.IsCyclic = EditorGUILayout.Toggle(
-                "Is path cyclic: ",
-                TargetCurcuit.Path.IsCyclic);
-
-                EditorGUILayout.Space();
-
-                EditorGUI.indentLevel += 1;
-                for (var i = 0; i < TargetCurcuit.Path.Count; i++)
-                {
-                    bool isSelected = SelectedBezierPoint == TargetCurcuit.Path[i];
-
-                    GUIStyle foldoutStyle = new GUIStyle(EditorStyles.foldout);
-
-                    if (isSelected)
-                    {
-                        foldoutStyle.fontStyle = FontStyle.Bold;
-                        foldoutStyle.normal.textColor = selectedBezierPointInspectorColor;
-                        foldoutStyle.onNormal.textColor = selectedBezierPointInspectorColor;
-                    }
-
-                    TargetCurcuit.Path[i].isExpanded = EditorGUILayout.Foldout(TargetCurcuit.Path[i].isExpanded, $"Bezier point {i}", true, foldoutStyle);
-
-                    if (TargetCurcuit.Path[i].isExpanded)
-                    {
-                        EditorGUI.indentLevel += 1;
-
-                        TargetCurcuit.Path[i].ControlPointMode
-                            = (BezierControlPointMode)EditorGUILayout.EnumPopup("Control point mode", TargetCurcuit.Path[i].ControlPointMode);
-
-                        TargetCurcuit.Path[i].Anchor = EditorGUILayout.Vector2Field("Anchor point", TargetCurcuit.Path[i].Anchor);
-                        TargetCurcuit.Path[i].ControlPoint1 = EditorGUILayout.Vector2Field("Control point 1", TargetCurcuit.Path[i].ControlPoint1);
-                        TargetCurcuit.Path[i].ControlPoint2 = EditorGUILayout.Vector2Field("Control point 2", TargetCurcuit.Path[i].ControlPoint2);
-
-                        EditorGUI.indentLevel -= 1;
-                    }
-                }
-                EditorGUI.indentLevel -= 1;
-
-                EditorGUI.indentLevel -= 1;
-            }
-
-            EditorGUILayout.Space();
-
-            if (GUI.changed)
-            {
-                EditorUtility.SetDirty(TargetCurcuit);
-                EditorSceneManager.MarkSceneDirty(TargetCurcuit.gameObject.scene);
-            }
+            CurcuitEditorInspectorDrawer.DrawInspector(this);
         }
 #endif
     }

@@ -54,12 +54,24 @@ namespace BezierSurcuitUtitlity
 
         public bool RemovePoint(BezierPoint point)
         {
-            return points.Remove(point);
+            bool removeResult = points.Remove(point);
+
+            if (points.Count <= 1)
+            {
+                IsCyclic = false;
+            }
+
+            return removeResult;
         }
 
         public void RemovePointAt(int index)
         {
             points.RemoveAt(index);
+
+            if (points.Count <= 1)
+            {
+                IsCyclic = false;
+            }
         }
 
         public int Count

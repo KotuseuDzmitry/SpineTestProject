@@ -21,6 +21,7 @@ namespace BezierSurcuitUtitlity
         [SerializeField]
         private Vector2 controlPoint2;
 
+        [SerializeField]
         private BezierControlPointMode controlPointMode = BezierControlPointMode.Mirrored;
 
         public BezierPoint()
