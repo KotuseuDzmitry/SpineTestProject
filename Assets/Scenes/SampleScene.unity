@@ -167,15 +167,10 @@ MonoBehaviour:
   path:
     isExpanded: 1
     points:
-    - isExpanded: 0
-      anchor: {x: 4.7098103, y: 9.438559}
-      controlPoint1: {x: 5.4728184, y: 8.79217}
-      controlPoint2: {x: 3.9468021, y: 10.084948}
-      controlPointMode: 2
     - isExpanded: 1
-      anchor: {x: -4.351577, y: 8.5299}
-      controlPoint1: {x: -0.76264286, y: 7.9478416}
-      controlPoint2: {x: -7.9405107, y: 9.111958}
+      anchor: {x: -16.99, y: 8.5299}
+      controlPoint1: {x: -13.401068, y: 7.9478416}
+      controlPoint2: {x: -20.578932, y: 9.111958}
       controlPointMode: 2
     - isExpanded: 0
       anchor: {x: -15.152269, y: 7.1710286}
@@ -193,43 +188,28 @@ MonoBehaviour:
       controlPoint2: {x: -4.4549885, y: -0.9954543}
       controlPointMode: 1
     - isExpanded: 0
-      anchor: {x: 2.0340564, y: -8.595505}
-      controlPoint1: {x: -3.6869059, y: -11.948568}
-      controlPoint2: {x: 11.266956, y: -10.995647}
-      controlPointMode: 0
-    - isExpanded: 0
-      anchor: {x: 15.948156, y: -4.015315}
-      controlPoint1: {x: 15.590864, y: -5.3726034}
-      controlPoint2: {x: 16.305449, y: -2.6580253}
+      anchor: {x: 6.551254, y: -8.535343}
+      controlPoint1: {x: 6.1939616, y: -9.892632}
+      controlPoint2: {x: 6.908543, y: -7.1780534}
       controlPointMode: 2
     - isExpanded: 0
-      anchor: {x: 11.819734, y: 1.526952}
-      controlPoint1: {x: 11.688661, y: 0.508986}
-      controlPoint2: {x: 11.950807, y: 2.544918}
+      anchor: {x: 23.3577, y: -0.43569276}
+      controlPoint1: {x: 25.516277, y: -6.290573}
+      controlPoint2: {x: 21.199123, y: 5.4191866}
       controlPointMode: 2
     - isExpanded: 0
-      anchor: {x: 16.513695, y: 5.372607}
-      controlPoint1: {x: 16.891605, y: 3.6759953}
-      controlPoint2: {x: 16.135784, y: 7.069219}
+      anchor: {x: 15.438412, y: 12.572568}
+      controlPoint1: {x: 20.15793, y: 11.82754}
+      controlPoint2: {x: 10.718893, y: 13.3175955}
       controlPointMode: 2
     - isExpanded: 0
-      anchor: {x: 10.801765, y: 8.878939}
-      controlPoint1: {x: 14.742559, y: 9.670689}
-      controlPoint2: {x: 6.8609715, y: 8.087189}
+      anchor: {x: 12.352076, y: 0.36096764}
+      controlPoint1: {x: 16.29287, y: 1.1527176}
+      controlPoint2: {x: 8.411282, y: -0.43078232}
       controlPointMode: 2
     - isExpanded: 0
-      anchor: {x: 7.1257734, y: 3.4497814}
-      controlPoint1: {x: 8.238881, y: 5.1463947}
-      controlPoint2: {x: 6.0126657, y: 1.7531681}
-      controlPointMode: 2
-    - isExpanded: 1
-      anchor: {x: 1.413841, y: -0.3393216}
-      controlPoint1: {x: 2.4138403, y: -0.3393216}
-      controlPoint2: {x: 0.41384172, y: -0.3393216}
-      controlPointMode: 2
-    - isExpanded: 0
-      anchor: {x: -3.6194384, y: 4.9767313}
-      controlPoint1: {x: -6.069215, y: 4.18498}
-      controlPoint2: {x: -1.169662, y: 5.7684827}
+      anchor: {x: 3.433633, y: 4.104838}
+      controlPoint1: {x: 4.5467405, y: 5.8014507}
+      controlPoint2: {x: 2.3205254, y: 2.4082248}
       controlPointMode: 2
     isCyclic: 1

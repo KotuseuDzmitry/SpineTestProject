@@ -142,6 +142,16 @@ namespace BezierSurcuitUtitlity
             }
         }
 
+        public void RemovePoint(int index)
+        {
+            if (TargetCurcuit.Path.Count > 1)
+            {
+                Undo.RecordObject(TargetCurcuit, "Remove Bezier Point");
+
+                TargetCurcuit.Path.RemovePointAt(index);
+            }
+        }
+
         private void OnEnable()
         {
             TargetCurcuit = target as Curcuit;

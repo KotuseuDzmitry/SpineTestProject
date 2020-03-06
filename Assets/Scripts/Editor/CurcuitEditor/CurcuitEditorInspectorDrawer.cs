@@ -127,7 +127,7 @@ namespace BezierSurcuitUtitlity
 
             if (GUILayout.Button("X", new GUIStyle(EditorStyles.miniButton) { }, GUILayout.Height(20f), GUILayout.Width(20f)))
             {
-                curcuitEditor.TargetCurcuit.Path.RemovePointAt(i);
+                curcuitEditor.RemovePoint(i);
                 return;
             }
 
