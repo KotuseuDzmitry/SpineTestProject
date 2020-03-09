@@ -25,6 +25,11 @@ namespace BezierSurcuitUtitlity
             points.Add(new BezierPoint());
         }
 
+        public Path(Vector2 startPosition)
+        {
+            points.Add(new BezierPoint(startPosition));
+        }
+
         public bool IsCyclic
         {
             get
@@ -33,7 +38,33 @@ namespace BezierSurcuitUtitlity
             }
             set
             {
+                if (points.Count <= 1)
+                {
+                    isCyclic = false;
+                    return;
+                }
                 isCyclic = value;
+            }
+        }
+
+
+        public Vector2 PathPosition
+        {
+            get
+            {
+                return GetMediumPosition();
+            }
+
+            set
+            {
+                Vector2 currentMidPosition = GetMediumPosition();
+
+                Vector2 deltaPosition = value - currentMidPosition;
+
+                foreach (BezierPoint point in points)
+                {
+                    point.Anchor += deltaPosition;
+                }
             }
         }
 
@@ -54,6 +85,11 @@ namespace BezierSurcuitUtitlity
 
         public bool RemovePoint(BezierPoint point)
         {
+            if (points.Count <= 1)
+            {
+                return false;
+            }
+
             bool removeResult = points.Remove(point);
 
             if (points.Count <= 1)
@@ -66,6 +102,11 @@ namespace BezierSurcuitUtitlity
 
         public void RemovePointAt(int index)
         {
+            if (points.Count <= 1)
+            {
+                return;
+            }
+
             points.RemoveAt(index);
 
             if (points.Count <= 1)
@@ -97,6 +138,18 @@ namespace BezierSurcuitUtitlity
             {
                 points[i] = value;
             }
+        }
+
+        private Vector2 GetMediumPosition()
+        {
+            Vector2 resultPosition = Vector2.zero;
+
+            foreach (BezierPoint point in points)
+            {
+                resultPosition += point.Anchor / points.Count;
+            }
+
+            return resultPosition;
         }
 }
 }

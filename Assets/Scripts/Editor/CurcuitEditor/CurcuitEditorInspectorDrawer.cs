@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using System;
 
 namespace BezierSurcuitUtitlity
 {
@@ -27,11 +26,22 @@ namespace BezierSurcuitUtitlity
 
             EditorGUILayout.Space();
 
-            ShowPathInfo();
+            ShowPathMoveHandleActivationToggle();
+
+            EditorGUILayout.Space();
+
+            ShowCurcuit();
 
             EditorGUILayout.Space();
 
             CheckChanges();
+        }
+
+        private static void ShowPathMoveHandleActivationToggle()
+        {
+            curcuitEditor.IsPathMoveHandleVisible = EditorGUILayout.Toggle(
+                            "Is selected path move handle visible: ",
+                            curcuitEditor.IsPathMoveHandleVisible);
         }
 
         private static void ShowScriptReference()
@@ -49,20 +59,80 @@ namespace BezierSurcuitUtitlity
                             GUILayout.ExpandWidth(true));
         }
 
-        private static void ShowPathInfo()
+        private static void ShowCurcuit()
         {
-            curcuitEditor.TargetCurcuit.Path.isExpanded = EditorGUILayout.Foldout(curcuitEditor.TargetCurcuit.Path.isExpanded, "Path", true);
-            if (curcuitEditor.TargetCurcuit.Path.isExpanded)
+            curcuitEditor.TargetCurcuit.isExpanded = EditorGUILayout.Foldout(curcuitEditor.TargetCurcuit.isExpanded, "Curcuit", true);
+            if (curcuitEditor.TargetCurcuit.isExpanded)
             {
                 EditorGUI.indentLevel += 1;
 
-                curcuitEditor.TargetCurcuit.Path.IsCyclic = EditorGUILayout.Toggle(
+                ShowPaths();
+
+                EditorGUI.indentLevel -= 1;
+            }
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            if (GUILayout.Button("Add path",
+                GUILayout.Height(25f), GUILayout.Width(200f)))
+            {
+                curcuitEditor.AddPathToOrigin();
+                return;
+            }
+
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+
+        private static void ShowPaths()
+        {
+            EditorGUI.indentLevel += 1;
+            for (var i = 0; i < curcuitEditor.TargetCurcuit.Count; i++)
+            {
+                ShowPath(i);
+            }
+            EditorGUI.indentLevel -= 1;
+        }
+
+        private static void ShowPath(int index)
+        {
+            Path pathToShow = curcuitEditor.TargetCurcuit[index];
+
+            bool isSelected = curcuitEditor.SelectedPath == pathToShow;
+
+            GUIStyle foldoutStyle = new GUIStyle(EditorStyles.foldout);
+
+            if (isSelected)
+            {
+                foldoutStyle.fontStyle = FontStyle.Bold;
+                foldoutStyle.normal.textColor = curcuitEditor.SelectedPathInspectorColor;
+                foldoutStyle.onNormal.textColor = curcuitEditor.SelectedPathInspectorColor;
+            }
+
+            GUILayout.BeginHorizontal();
+
+            pathToShow.isExpanded = EditorGUILayout.Foldout(pathToShow.isExpanded, $"Path {index}", true, foldoutStyle);
+
+            if (GUILayout.Button("X", new GUIStyle(EditorStyles.miniButton) { }, GUILayout.Height(20f), GUILayout.Width(20f)))
+            {
+                curcuitEditor.RemovePath(index);
+                return;
+            }
+
+            GUILayout.EndHorizontal();
+
+            if (pathToShow.isExpanded)
+            {
+                EditorGUI.indentLevel += 1;
+
+                pathToShow.IsCyclic = EditorGUILayout.Toggle(
                 "Is path cyclic: ",
-                curcuitEditor.TargetCurcuit.Path.IsCyclic);
+                pathToShow.IsCyclic);
 
                 EditorGUILayout.Space();
 
-                ShowPoints();
+                ShowPoints(pathToShow);
 
                 GUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
@@ -70,7 +140,7 @@ namespace BezierSurcuitUtitlity
                 if (GUILayout.Button("Add new point",
                     GUILayout.Height(25f), GUILayout.Width(200f)))
                 {
-                    curcuitEditor.AddPointInOrigin();
+                    curcuitEditor.AddPointInOrigin(index);
                     return;
                 }
 
@@ -97,19 +167,19 @@ namespace BezierSurcuitUtitlity
             }
         }
 
-        private static void ShowPoints()
+        private static void ShowPoints(Path path)
         {
             EditorGUI.indentLevel += 1;
-            for (var i = 0; i < curcuitEditor.TargetCurcuit.Path.Count; i++)
+            for (var i = 0; i < path.Count; i++)
             {
-                ShowPoint(i);
+                ShowPoint(path, i);
             }
             EditorGUI.indentLevel -= 1;
         }
 
-        private static void ShowPoint(int i)
+        private static void ShowPoint(Path path, int index)
         {
-            bool isSelected = curcuitEditor.SelectedBezierPoint == curcuitEditor.TargetCurcuit.Path[i];
+            bool isSelected = curcuitEditor.SelectedBezierPoint == path[index];
 
             GUIStyle foldoutStyle = new GUIStyle(EditorStyles.foldout);
 
@@ -122,30 +192,30 @@ namespace BezierSurcuitUtitlity
 
             EditorGUILayout.BeginHorizontal();
 
-            curcuitEditor.TargetCurcuit.Path[i].isExpanded
-                = EditorGUILayout.Foldout(curcuitEditor.TargetCurcuit.Path[i].isExpanded, $"Bezier point {i}", true, foldoutStyle);
+            path[index].isExpanded
+                = EditorGUILayout.Foldout(path[index].isExpanded, $"Bezier point {index}", true, foldoutStyle);
 
             if (GUILayout.Button("X", new GUIStyle(EditorStyles.miniButton) { }, GUILayout.Height(20f), GUILayout.Width(20f)))
             {
-                curcuitEditor.RemovePoint(i);
+                curcuitEditor.RemovePoint(path, index);
                 return;
             }
 
             EditorGUILayout.EndHorizontal();
 
-            if (curcuitEditor.TargetCurcuit.Path[i].isExpanded)
+            if (path[index].isExpanded)
             {
                 EditorGUI.indentLevel += 1;
 
-                curcuitEditor.TargetCurcuit.Path[i].ControlPointMode
-                    = (BezierControlPointMode)EditorGUILayout.EnumPopup("Control point mode", curcuitEditor.TargetCurcuit.Path[i].ControlPointMode);
+                path[index].ControlPointMode
+                    = (BezierControlPointMode)EditorGUILayout.EnumPopup("Control point mode", path[index].ControlPointMode);
 
-                curcuitEditor.TargetCurcuit.Path[i].Anchor
-                    = EditorGUILayout.Vector2Field("Anchor point", curcuitEditor.TargetCurcuit.Path[i].Anchor);
-                curcuitEditor.TargetCurcuit.Path[i].ControlPoint1
-                    = EditorGUILayout.Vector2Field("Control point 1", curcuitEditor.TargetCurcuit.Path[i].ControlPoint1);
-                curcuitEditor.TargetCurcuit.Path[i].ControlPoint2
-                    = EditorGUILayout.Vector2Field("Control point 2", curcuitEditor.TargetCurcuit.Path[i].ControlPoint2);
+                path[index].Anchor
+                    = EditorGUILayout.Vector2Field("Anchor point", path[index].Anchor);
+                path[index].ControlPoint1
+                    = EditorGUILayout.Vector2Field("Control point 1", path[index].ControlPoint1);
+                path[index].ControlPoint2
+                    = EditorGUILayout.Vector2Field("Control point 2", path[index].ControlPoint2);
 
                 EditorGUI.indentLevel -= 1;
             }

@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System;
 
 namespace BezierSurcuitUtitlity
 {
     public static class CurcuitEditorDrawer
     {
-        private static CurcuitEditor curcuitEditor; 
+        private static CurcuitEditor curcuitEditor;
+
+        private static float currentColorOpacity = 1f;
 
         public static void HandleDrawing(CurcuitEditor curcuitEditor)
         {
@@ -16,34 +19,90 @@ namespace BezierSurcuitUtitlity
                 return;
             }
 
-            int pathCount = curcuitEditor.TargetCurcuit.Path.Count;
-
-            Handles.color = curcuitEditor.NormalColor;
-
-            if (pathCount > 0)
+            foreach (Path path in curcuitEditor.TargetCurcuit)
             {
-                ShowBezierPoint(curcuitEditor.TargetCurcuit.Path[0]);
+                if (path == curcuitEditor.SelectedPath)
+                {
+                    currentColorOpacity = CurcuitEditor.selectedPathOpacity;
+
+                    DrawSelectedPathMoveHandle();
+                }
+                else
+                {
+                    currentColorOpacity = CurcuitEditor.nonSelectedPathOpacity;
+                }
+
+                int pathCount = path.Count;
+
+                Handles.color =
+                    new Color(
+                        curcuitEditor.NormalColor.r,
+                        curcuitEditor.NormalColor.g,
+                        curcuitEditor.NormalColor.b,
+                        currentColorOpacity
+                    );
+
+                if (pathCount > 0)
+                {
+                    ShowBezierPoint(path[0]);
+                }
+
+                if (path.IsCyclic && pathCount >= 2)
+                {
+                    ShowBezierCurve(path[pathCount - 1], path[0], pathCount - 1, 0);
+                }
+
+                for (var i = 1; i < pathCount; i++)
+                {
+                    ShowBezierPoint(path[i]);
+
+                    ShowBezierCurve(path[i - 1], path[i], i - 1, i);
+                }
+            }
+        }
+
+        private static void DrawSelectedPathMoveHandle()
+        {
+            if (!curcuitEditor.IsPathMoveHandleVisible)
+            {
+                return;
             }
 
-            if (curcuitEditor.TargetCurcuit.Path.IsCyclic && pathCount >= 2)
+            if (curcuitEditor.SelectedPath == null)
             {
-                ShowBezierCurve(curcuitEditor.TargetCurcuit.Path[pathCount - 1], curcuitEditor.TargetCurcuit.Path[0], pathCount - 1, 0);
+                return;
             }
 
-            for (var i = 1; i < pathCount; i++)
+            Vector2 globalPathPosition = curcuitEditor.HandleTransform.TransformPoint(curcuitEditor.SelectedPath.PathPosition);
+            EditorGUI.BeginChangeCheck();
+            globalPathPosition = Handles.DoPositionHandle(globalPathPosition, curcuitEditor.HandleRotation);
+            if (EditorGUI.EndChangeCheck())
             {
-                ShowBezierPoint(curcuitEditor.TargetCurcuit.Path[i]);
-
-                ShowBezierCurve(curcuitEditor.TargetCurcuit.Path[i - 1], curcuitEditor.TargetCurcuit.Path[i], i - 1, i);
+                Undo.RecordObject(curcuitEditor.TargetCurcuit, "Move Path");
+                EditorUtility.SetDirty(curcuitEditor.TargetCurcuit);
+                curcuitEditor.SelectedPath.PathPosition = curcuitEditor.HandleTransform.InverseTransformPoint(globalPathPosition);
             }
         }
 
         private static void ShowBezierCurve(BezierPoint firstBezierPoint, BezierPoint secondBezierPoint, int index1, int index2)
         {
-            Color paintColor = curcuitEditor.BezierCurveColor;
-            if ((curcuitEditor.SelectedSegment - new Vector2(index1, index2)).sqrMagnitude < Mathf.Epsilon)
+            Color paintColor =
+                    new Color(
+                        curcuitEditor.BezierCurveColor.r,
+                        curcuitEditor.BezierCurveColor.g,
+                        curcuitEditor.BezierCurveColor.b,
+                        currentColorOpacity
+                    );
+
+            if (curcuitEditor.SelectedSegment == new Vector2Int(index1, index2))
             {
-                paintColor = curcuitEditor.SelectedBezierCurveColor;
+                paintColor =
+                    new Color(
+                        curcuitEditor.SelectedBezierCurveColor.r,
+                        curcuitEditor.SelectedBezierCurveColor.g,
+                        curcuitEditor.SelectedBezierCurveColor.b,
+                        currentColorOpacity
+                    );
             }
 
             Handles.DrawBezier(
@@ -61,7 +120,13 @@ namespace BezierSurcuitUtitlity
         {
             if (curcuitEditor.SelectedBezierPoint == bezierPoint)
             {
-                Handles.color = curcuitEditor.SelectedBezierPointColor;
+                Handles.color =
+                    new Color(
+                        curcuitEditor.SelectedBezierPointColor.r,
+                        curcuitEditor.SelectedBezierPointColor.g,
+                        curcuitEditor.SelectedBezierPointColor.b,
+                        currentColorOpacity
+                    );
             }
 
             ShowPointControlPoint(bezierPoint, 1);
@@ -70,7 +135,13 @@ namespace BezierSurcuitUtitlity
 
             ShowLines(bezierPoint);
 
-            Handles.color = curcuitEditor.NormalColor;
+            Handles.color =
+                    new Color(
+                        curcuitEditor.NormalColor.r,
+                        curcuitEditor.NormalColor.g,
+                        curcuitEditor.NormalColor.b,
+                        currentColorOpacity
+                    );
         }
 
         private static void ShowLines(BezierPoint bezierPoint)
@@ -86,7 +157,13 @@ namespace BezierSurcuitUtitlity
         {
             Color oldColor = Handles.color;
 
-            Handles.color = curcuitEditor.BezierAnchorPointColor;
+            Handles.color =
+                    new Color(
+                        curcuitEditor.BezierAnchorPointColor.r,
+                        curcuitEditor.BezierAnchorPointColor.g,
+                        curcuitEditor.BezierAnchorPointColor.b,
+                        currentColorOpacity
+                    );
 
             Vector2 anchorGlobal = curcuitEditor.HandleTransform.TransformPoint(bezierPoint.Anchor);
 
