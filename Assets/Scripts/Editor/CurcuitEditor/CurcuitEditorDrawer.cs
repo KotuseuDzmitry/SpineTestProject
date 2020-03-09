@@ -49,14 +49,14 @@ namespace BezierSurcuitUtitlity
 
                 if (path.IsCyclic && pathCount >= 2)
                 {
-                    ShowBezierCurve(path[pathCount - 1], path[0], pathCount - 1, 0);
+                    ShowBezierCurve(path[pathCount - 1], path[0], pathCount - 1, 0, path);
                 }
 
                 for (var i = 1; i < pathCount; i++)
                 {
                     ShowBezierPoint(path[i]);
 
-                    ShowBezierCurve(path[i - 1], path[i], i - 1, i);
+                    ShowBezierCurve(path[i - 1], path[i], i - 1, i, path);
                 }
             }
         }
@@ -84,7 +84,7 @@ namespace BezierSurcuitUtitlity
             }
         }
 
-        private static void ShowBezierCurve(BezierPoint firstBezierPoint, BezierPoint secondBezierPoint, int index1, int index2)
+        private static void ShowBezierCurve(BezierPoint firstBezierPoint, BezierPoint secondBezierPoint, int index1, int index2, Path path)
         {
             Color paintColor =
                     new Color(
@@ -94,7 +94,7 @@ namespace BezierSurcuitUtitlity
                         currentColorOpacity
                     );
 
-            if (curcuitEditor.SelectedSegment == new Vector2Int(index1, index2))
+            if (curcuitEditor.SelectedSegment == new Vector2Int(index1, index2) && curcuitEditor.SelectedPath == path)
             {
                 paintColor =
                     new Color(
